@@ -30,7 +30,7 @@ def login():
     email = input("Enter email: ")
     password = input("Enter password: ")
 
-    # check if user exists and login matches password
+    # check if email exists and login matches password
     if email in mydict and mydict[email] == password:
         print("\nLogin successful!\n")
     else:
