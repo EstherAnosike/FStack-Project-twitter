@@ -41,7 +41,7 @@ class User:
                 
                 
                      
-                     '''.format(self.user_name,list_user.user_name,len(self.__following)))
+                     '''.format(self.user_name,user_obj.user_name,len(self.following)))
 
     def unfollow(self,user_name):
         for user in Tweeter.load(USER_DETAILS):
