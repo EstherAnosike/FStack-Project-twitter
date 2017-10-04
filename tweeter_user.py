@@ -170,21 +170,3 @@ class Tweeter:
         return user_obj
 
 
-def main():
-    Tweeter.register("George", "george@gmail.com", b"asdfghjkl")
-    # Tweeter.register("Ib", "ibra@gmail.com", b'1234567890')
-
-    # george = Tweeter.login("george@gmail.com", b"asdfghjkl")
-
-    Ib = Tweeter.login("ibra@gmail.com", b'1234567890')    # george.follow("Ib")
-
-    
-
-    # Ib.follow("George")
-
-
-if __name__ == '__main__':
-    main()
-
-
-
