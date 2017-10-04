@@ -21,7 +21,9 @@ class User:
         self.password = kwargs.get('password')
         self.fullname = kwargs.get("fullname")
         self.profile_url = kwargs.get("profile_url")
-        self.messages = kwargs.get('messages')
+        self.messages = []
+        self.messages.append(kwargs.get('messages', []))
+
         self.followers = []
         self.following = []
         self.following.append(kwargs.get("following"))
@@ -34,9 +36,44 @@ class User:
         self.is_logged_in = kwargs.get("is_logged_in", False)
         self.last_login_time = datetime.now()
 
-    def tweet(self, my_tweet):
 
-        pass
+
+
+    def tweet(self, my_tweet):
+        tweet = Tweet(self, my_tweet[:280])
+        self.tweets.append(tweet)
+
+    def retweet(self, tweet):
+        if tweet in self.tweets:
+            tweet.retweet -= 1
+        else:
+            self.tweets.append(tweet)
+
+    def like(self, tweet):
+        if tweet in self.tweets:
+            tweet.likes += 1
+
+    def __del_obj(self, obj):
+        if isinstance(obj, Tweet):
+            if obj in self.tweets:
+                self.tweets.remove(obj)
+        elif isinstance(obj, Message):
+            if obj in self.messages:
+                self.messages.remove(obj)
+
+    def del_tweet(self, tweet):
+        self.__del_obj(tweet)
+    def del_message(self, msg):
+        self.__del_obj(msg)
+
+    def message(self, msg_txt, to):
+        if isinstance(to, User):
+            msg = Message(msg_txt, self, to)
+            self.messages.append(msg)
+            print("Sent message to {} at {} time".format(to.user_name, msg.creation_date))
+        else:
+            print("Invalid recipient!")
+
 
     def follow(self, user_name=""):
         users_dict = Tweeter.load(USER_DETAILS)
@@ -99,17 +136,29 @@ class Tweet:
     Takes the username of the person tweeting and the message
     Returns the tweet object
     """
-    def __init__(self, user_name, message):
-        self.user_name = user_name
+    def __init__(self, user, message):
+        self.user = user
         self.message = message
-        tweets.append(self)
+        self.like = 0
+        self.retweets = 0
+        self.creation_date = datetime.now()
+
+class Message:
+
+    def __init__(self,msg, fr, to):
+        self.msg = msg
+        self.creation_date = datetime.now()
+        self.to = to
+        self.fr = fr
+
+    def __repr__(self):
+        return"{} at this {}".format(self.msg, self.datetime)
 
 
 class Tweeter:
 
     @staticmethod
     def save(info_dict):
-        print(info_dict)
         headers = ['following', 'date_of_birth', 'user_name', 'bio_data', 'email', 'password', 'is_logged_in', 'creation_date', 'messages', 'tweets', 'fullname', 'last_login_time', 'phone_number', 'followers', 'profile_url']
         try:
             with open(USER_DETAILS, 'a+') as fh:
@@ -169,18 +218,28 @@ class Tweeter:
                 user_obj = User.create_user(**user )
         return user_obj
 
+    @staticmethod
+    def logout(self):
+        if self.is_logged_in:
+            self.is_logged_in = False
+            del self
+            print("Logged out!")
+
+
 
 def main():
-    Tweeter.register("George", "george@gmail.com", b"asdfghjkl")
+    #Tweeter.register("George", "george@gmail.com", b"asdfghjkl")
     # Tweeter.register("Ib", "ibra@gmail.com", b'1234567890')
 
-    # george = Tweeter.login("george@gmail.com", b"asdfghjkl")
-
+    george = Tweeter.login("george@gmail.com", b"asdfghjkl")
+    #
     Ib = Tweeter.login("ibra@gmail.com", b'1234567890')    # george.follow("Ib")
+    if Ib is not None:
+         Ib.follow("George")
+         Ib.message("Hi man", george)
 
-    
-
-    # Ib.follow("George")
+    # else:
+    #     print("Invalid credentials!")
 
 
 if __name__ == '__main__':
