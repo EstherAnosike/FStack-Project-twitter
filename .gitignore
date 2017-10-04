@@ -1,2 +1,5 @@
 *.csv
+tweeter.py
+tweets.py
+.idea
 
