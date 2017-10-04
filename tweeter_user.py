@@ -26,14 +26,14 @@ class User:
 
         self.followers = []
         self.following = []
-        self.following.append(kwargs.get("following"))
-        self.followers.append(kwargs.get("followers"))
+        self.following.extend(kwargs.get("following", []))
+        self.followers.extend(kwargs.get("followers", []))
         self.bio_data = kwargs.get("bio_data")
         self.phone_number = kwargs.get("phone_number")
         self.date_of_birth = kwargs.get('date_of_birth', None)
         self.creation_date = kwargs.get("creation_date", datetime.now())
         self.tweets = []
-        self.tweets.append(kwargs.get("tweets"))
+        self.tweets.append(kwargs.get("tweets", []))
         self.is_logged_in = kwargs.get("is_logged_in", False)
         self.last_login_time = datetime.now()
 
@@ -120,11 +120,15 @@ class User:
 
     def get_tweet(self):
         for k, t in enumerate(self.tweets):
-            print("Tweet {} \t {} ".format((k + 1), t))
+            if not t == None:
+                print("Tweet {} \t {} ".format((k + 1), t))
+
 
     def get_messages(self):
         for k, m in enumerate(self.messages):
-            print("Message {} \t {}".format((k + 1), m))
+            if not m == None:
+                print("Message {} \t {}".format((k + 1), m))
+
 
 
     def __repr__(self):
@@ -246,24 +250,23 @@ class Tweeter:
 
 
 def main():
-    pass
     #Tweeter.register("George", "george@gmail.com", b"asdfghjkl")
-    # Tweeter.register("Ib", "ibra@gmail.com", b'1234567890')
+    #Tweeter.register("Ib", "ibra@gmail.com", b'1234567890')
 
-    # george = Tweeter.login("george@gmail.com", b"asdfghjkl")
-    #
-    # Ib = Tweeter.login("ibra@gmail.com", b'1234567890')    # george.follow("Ib")
-    # if Ib is not None:
-    #      Ib.follow("George")
-    #      Ib.message("Hi man", george)
-    #
-    #      c = Ib.tweet("Hi y'all, I am happy")
-    #      d = Ib.tweet("The second tweet here!")
-    #
-    #      print("{} Liked Tweet".format(Ib.user_name, ))
-    #      c.like()
-    #
-    #      Ib.get_tweet()
+    george = Tweeter.login("george@gmail.com", b"asdfghjkl")
+
+    Ib = Tweeter.login("ibra@gmail.com", b'1234567890')    # george.follow("Ib")
+    if Ib is not None:
+         Ib.follow("George")
+         Ib.message("Hi man", george)
+
+         c = Ib.tweet("Hi y'all, I am happy")
+         d = Ib.tweet("The second tweet here!")
+
+         print("{} Liked Tweet".format(Ib.user_name, ))
+         c.like()
+
+         Ib.get_tweet()
 
     # else:
     #     print("Invalid credentials!")
