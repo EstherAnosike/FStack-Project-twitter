@@ -9,4 +9,10 @@ Team name is FStack-Project/twitter and members include:
 * Osodo George
 * Ruhiu Dennis
 
+Please note that the code has to meet up with the following standard - 
++ PEP 8
+* Comments where nessesary
+* Code should be in correct scopes and have explanatory variable names
+
+
 The rest of the document shall be updated from time to time.
