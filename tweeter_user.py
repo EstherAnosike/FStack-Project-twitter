@@ -32,7 +32,8 @@ class User:
         self.phone_number = kwargs.get("phone_number")
         self.date_of_birth = kwargs.get('date_of_birth', None)
         self.creation_date = kwargs.get("creation_date", datetime.now())
-        self.tweets = kwargs.get("tweets")
+        self.tweets = []
+        self.tweets.append(kwargs.get("tweets"))
         self.is_logged_in = kwargs.get("is_logged_in", False)
         self.last_login_time = datetime.now()
 
@@ -42,6 +43,7 @@ class User:
     def tweet(self, my_tweet):
         tweet = Tweet(self, my_tweet[:280])
         self.tweets.append(tweet)
+        return tweet
 
     def retweet(self, tweet):
         if tweet in self.tweets:
@@ -49,9 +51,7 @@ class User:
         else:
             self.tweets.append(tweet)
 
-    def like(self, tweet):
-        if tweet in self.tweets:
-            tweet.likes += 1
+
 
     def __del_obj(self, obj):
         if isinstance(obj, Tweet):
@@ -118,6 +118,15 @@ class User:
     def create_user(cls, **datadict):
         return cls(**datadict)
 
+    def get_tweet(self):
+        for k, t in enumerate(self.tweets):
+            print("Tweet {} \t {} ".format((k + 1), t))
+
+    def get_messages(self):
+        for k, m in enumerate(self.messages):
+            print("Message {} \t {}".format((k + 1), m))
+
+
     def __repr__(self):
         return("""
         Account Information:
@@ -139,9 +148,18 @@ class Tweet:
     def __init__(self, user, message):
         self.user = user
         self.message = message
-        self.like = 0
+        self.likes = 0
         self.retweets = 0
         self.creation_date = datetime.now()
+
+    def __repr__(self):
+        return ("""
+        {}
+        Likes: {}         Retweets: {}      Time: {}
+        """.format(self.message, self.likes,self.retweets, self.creation_date))
+
+    def like(self):
+        self.likes += 1
 
 class Message:
 
@@ -152,7 +170,7 @@ class Message:
         self.fr = fr
 
     def __repr__(self):
-        return"{} at this {}".format(self.msg, self.datetime)
+        return"{} at this {}".format(self.msg, self.creation_date)
 
 
 class Tweeter:
@@ -228,15 +246,24 @@ class Tweeter:
 
 
 def main():
+    pass
     #Tweeter.register("George", "george@gmail.com", b"asdfghjkl")
     # Tweeter.register("Ib", "ibra@gmail.com", b'1234567890')
 
-    george = Tweeter.login("george@gmail.com", b"asdfghjkl")
+    # george = Tweeter.login("george@gmail.com", b"asdfghjkl")
     #
-    Ib = Tweeter.login("ibra@gmail.com", b'1234567890')    # george.follow("Ib")
-    if Ib is not None:
-         Ib.follow("George")
-         Ib.message("Hi man", george)
+    # Ib = Tweeter.login("ibra@gmail.com", b'1234567890')    # george.follow("Ib")
+    # if Ib is not None:
+    #      Ib.follow("George")
+    #      Ib.message("Hi man", george)
+    #
+    #      c = Ib.tweet("Hi y'all, I am happy")
+    #      d = Ib.tweet("The second tweet here!")
+    #
+    #      print("{} Liked Tweet".format(Ib.user_name, ))
+    #      c.like()
+    #
+    #      Ib.get_tweet()
 
     # else:
     #     print("Invalid credentials!")
