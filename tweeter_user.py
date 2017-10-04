@@ -5,6 +5,7 @@ from hashlib import sha256
 import os
 
 USER_DETAILS = "details.csv"
+tweets = []
 
 
 class User:
@@ -13,6 +14,7 @@ class User:
     @Class User - Generic class representing the user in the tweeter application
     The class holds all the properties and methods required to fully manipulate a user inside the class.
     """
+
     def __init__(self, **kwargs):
         self.user_name = kwargs.get('user_name')
         self.email = kwargs.get('email')
@@ -32,6 +34,10 @@ class User:
         self.is_logged_in = kwargs.get("is_logged_in", False)
         self.last_login_time = datetime.now()
 
+    def tweet(self, my_tweet):
+
+        pass
+
     def follow(self, user_name=""):
         users_dict = Tweeter.load(USER_DETAILS)
 
@@ -49,7 +55,7 @@ class User:
             if user_obj.user_name == user_name:
                 temp_user_obj = user_obj
                 users_dict.remove(user)
-                temp_user_obj.followers.append(self)  # asedding current user the persons followers
+                temp_user_obj.followers.append(self)  # adding current user the persons followers
                 temp_self.following.append(temp_user_obj)  # Adding the person to current users following
                 users_dict.append(temp_user_obj.__dict__)
                 users_dict.append(temp_self.__dict__)
@@ -84,6 +90,19 @@ class User:
         Logged in: {} Since: {}
         """.format(self.user_name.capitalize(), self.creation_date, len(self.tweets), len(self.messages), \
                    len(self.followers), len(self.following), self.email, self.is_logged_in, self.last_login_time))
+
+
+class Tweet:
+
+    """
+    @Tweet creates the tweet object
+    Takes the username of the person tweeting and the message
+    Returns the tweet object
+    """
+    def __init__(self, user_name, message):
+        self.user_name = user_name
+        self.message = message
+        tweets.append(self)
 
 
 class Tweeter:
@@ -157,7 +176,9 @@ def main():
 
     # george = Tweeter.login("george@gmail.com", b"asdfghjkl")
 
-    # Ib = Tweeter.login("ibra@gmail.com", b'1234567890')    # george.follow("Ib")
+    Ib = Tweeter.login("ibra@gmail.com", b'1234567890')    # george.follow("Ib")
+
+    
 
     # Ib.follow("George")
 
