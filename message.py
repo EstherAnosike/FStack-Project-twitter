@@ -13,6 +13,3 @@ class Message:
 
 	def __repr__(self):
 		return"{} at this {}".format(self.msg, self.datetime)
-
-mess = Message("message goes here")
-print(mess)
